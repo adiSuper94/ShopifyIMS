@@ -1,0 +1,86 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id "org.flywaydb.flyway" version "8.4.1"
+	id 'nu.studer.jooq' version "6.0.1"
+}
+
+group = 'com.adiSuper94'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '16'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-jooq'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.flywaydb:flyway-core'
+	jooqGenerator 'org.postgresql:postgresql:42.3.1'
+	runtimeOnly 'org.postgresql:postgresql'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+	useJUnitPlatform()
+}
+tasks.register('printProps') {
+	doFirst {
+		println System.getenv('SPRING_DATASOURCE_URL')
+		println System.getenv('SPRING_DATASOURCE_USERNAME')
+		println System.getenv('SPRING_DATASOURCE_PASSWORD')
+		println System.properties['system']
+	}
+}
+flyway {
+	driver = 'org.postgresql.Driver'
+	url = 'jdbc:postgresql://localhost:5432/shopify_ims_db'
+	user = 'adisuper'
+	password = 'password'
+	schemas = ['core']
+	defaultSchema = 'core'
+	locations = ['filesystem:./src/main/resources/db/migration']
+}
+
+jooq {
+	version = '3.15.6'
+	edition = nu.studer.gradle.jooq.JooqEdition.OSS
+	configurations {
+		main {
+			generationTool {
+				jdbc {
+					driver = 'org.postgresql.Driver'
+					url = 'jdbc:postgresql://localhost:5432/shopify_ims_db'
+					user = 'adisuper'
+					password = 'password'
+				}
+				generator {
+					database {
+						name = 'org.jooq.meta.postgres.PostgresDatabase'
+						includes = 'core\\..*'
+						excludes = 'core\\.flyway_schema_history'
+
+					}
+					generate {
+						pojos = true
+						daos = true
+						relations = true
+						records = true
+						generatedAnnotation = true
+						springAnnotations = true
+						jpaAnnotations = true
+						validationAnnotations = false
+						fluentSetters = true
+						generatedSerialVersionUID = 'HASH'
+					}
+					target {
+						packageName = 'com.adiSuper.generated'
+					}
+				}
+			}
+		}
+	}
+}
