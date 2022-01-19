@@ -24,7 +24,7 @@ public class CatalogService {
     }
 
     public Catalog getCatalogById(UUID id){
-        Optional<Catalog> optionalCatalog = catalogDbAccessor.getCatalogById(id);
+        Optional<Catalog> optionalCatalog = catalogDbAccessor.fetchCatalogById(id);
         return optionalCatalog.orElseThrow(() -> new EntityNotFoundException("Catalog not found with id::" + id.toString()));
     }
 

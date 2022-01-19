@@ -23,7 +23,7 @@ public class CatalogDbAccessor {
         this.db = db;
     }
 
-    public Optional<Catalog> getCatalogById(UUID id) {
+    public Optional<Catalog> fetchCatalogById(UUID id) {
         return dao.fetchOptional(Tables.CATALOG.ID, id);
     }
 
@@ -40,7 +40,7 @@ public class CatalogDbAccessor {
     }
 
     public Optional<Catalog> updateCatalogById(UUID id, Catalog catalog) {
-        Optional<Catalog> optionalOldCatalog = this.getCatalogById(id);
+        Optional<Catalog> optionalOldCatalog = this.fetchCatalogById(id);
         if (optionalOldCatalog.isPresent()) {
             catalog.setId(id);
             catalog.setModifiedAt(LocalDateTime.now());

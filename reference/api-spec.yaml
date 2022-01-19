@@ -10,7 +10,7 @@ info:
 servers:
   - url: 'http://localhost:3000'
 paths:
-  '/catalog/{catalogId}':
+  '/v1/catalog/{catalogId}':
     parameters:
       - schema:
           type: string
@@ -70,8 +70,12 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: number
       description: Delete an item from catalog with the matching ID.
-  /catalog:
+  /v1/catalog:
     post:
       summary: Create New User
       operationId: post-catalog
@@ -81,12 +85,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Catalog'
+                type: string
+                format: uuid
               examples: {}
         '400':
           description: Missing Required Information
-        '409':
-          description: Email Already Taken
       requestBody:
         content:
           application/json:
@@ -126,6 +129,70 @@ paths:
           name: sku
           required: true
       description: Get Catalog item for the matching SKU.
+  '/v1/supplier/{supplierId}':
+    parameters:
+      - schema:
+          type: string
+        name: supplierId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+      operationId: get-v1-supplier-supplierId
+      description: Fetch Supplier by ID.
+    patch:
+      summary: ''
+      operationId: patch-v1-supplier-supplierId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+      description: Patch SUpplier by Id.
+    delete:
+      summary: ''
+      operationId: delete-v1-supplier-supplierId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: number
+      description: Delete Supplier byID.
+  /v1/supplier:
+    post:
+      summary: ''
+      operationId: post-v1-supplier
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+      description: Create new Supplier.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                '':
+                  type: string
+              required: []
+        description: Post the necessary fields for the API to create a new supplier.
 components:
   schemas:
     Catalog:
@@ -166,3 +233,21 @@ components:
         - sku
         - name
         - created_at
+    Supplier:
+      title: Supplier
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        modified_at:
+          type: string
+          format: date
+          readOnly: true
+      description: Supplier Schema
