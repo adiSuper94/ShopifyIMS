@@ -32,14 +32,14 @@ public class InventoryService {
     }
 
     public Inventory patchInventoryById(UUID id, Inventory inventory){
-        Optional<Inventory> optionalSupplier = inventoryDbAccessor.updateInventoryById(id, inventory);
-        return optionalSupplier.orElseThrow(() -> new EntityNotFoundException("Inventory not found with id::" + id.toString() + "(or could not not update row with given values)"));
+        Optional<Inventory> optionalInventory = inventoryDbAccessor.updateInventoryById(id, inventory);
+        return optionalInventory.orElseThrow(() -> new EntityNotFoundException("Inventory not found with id::" + id.toString() + "(or could not not update row with given values)"));
     }
 
     public UUID addOrReduceInventory(InventoryRequest inventoryRequest){
         Inventory filter = new Inventory();
         filter.setSku(inventoryRequest.getSku());
-        filter.setSupplierId(inventoryRequest.getSupplierId());
+        //filter.setSupplierId(inventoryRequest.getSupplierId());
         Inventory inventory;
         try{
             inventory = getAllInventory(Optional.of(filter)).get(0);
@@ -48,7 +48,7 @@ public class InventoryService {
             inventory = new Inventory();
             inventory.setQuantity(0);
             inventory.setSku(inventoryRequest.getSku());
-            inventory.setSupplierId(inventory.getSupplierId());
+            //inventory.setSupplierId(inventory.getSupplierId());
         }
 
         InventoryHistoryType type;

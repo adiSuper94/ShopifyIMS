@@ -121,7 +121,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Catalog'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Catalog'
       parameters: []
       description: Get Catalog item for the matching SKU.
   '/v1/suppliers/{supplierId}':
@@ -198,8 +200,47 @@ paths:
     get:
       summary: Your GET endpoint
       tags: []
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Inventory'
       operationId: get-v1-inventories-inventoryId
+  /v1/inventories:
+    post:
+      summary: ''
+      operationId: post-v1-inventories
+      responses:
+        '200':
+          description: OK
+      description: Add or reduce inventories
+      requestBody:
+        $ref: '#/components/requestBodies/InventoryRequest'
+    get:
+      summary: ''
+      operationId: get-v1-inventories
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                sku:
+                  type: string
+                quantity:
+                  type: integer
+        description: keys are used as filters.
+      description: Get all inventories by filter.
 components:
   schemas:
     Catalog:
@@ -261,11 +302,9 @@ components:
     Inventory:
       title: Inventory
       type: object
+      description: Inventory model schema.
       properties:
         id:
-          type: string
-          format: uuid
-        supplier_id:
           type: string
           format: uuid
         sku:
@@ -281,4 +320,22 @@ components:
           type: string
           format: date-time
           readOnly: true
-      description: Inventory model schema.
+  requestBodies:
+    InventoryRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              is_reduce:
+                type: boolean
+              count:
+                type: integer
+                minimum: 0
+              sku:
+                type: string
+            required:
+              - is_reduce
+              - count
+              - sku
+      description: Inventory Request schema

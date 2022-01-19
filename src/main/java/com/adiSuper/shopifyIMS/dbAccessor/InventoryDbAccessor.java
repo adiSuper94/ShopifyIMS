@@ -99,9 +99,9 @@ public class InventoryDbAccessor {
         if(inventory.getId() != null){
             condition = condition.and(Tables.INVENTORY.ID.eq(inventory.getId()));
         }
-        if(inventory.getSupplierId()!= null){
+        /*if(inventory.getSupplierId()!= null){
             condition = condition.and(Tables.INVENTORY.SUPPLIER_ID.eq(inventory.getSupplierId()));
-        }
+        }*/
         if(inventory.getSku() != null){
             condition = condition.and(Tables.INVENTORY.SKU.eq(inventory.getSku()));
         }
