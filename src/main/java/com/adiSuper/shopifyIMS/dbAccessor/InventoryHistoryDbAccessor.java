@@ -29,7 +29,7 @@ public class InventoryHistoryDbAccessor {
         return db.insertInto(Tables.INVENTORY_HISTORY).set(record).returningResult(Tables.INVENTORY_HISTORY.ID).fetchOne(Tables.INVENTORY_HISTORY.ID);
     }
 
-    public UUID insertHistoryRecord(String sku, int quantity, InventoryHistoryType type){
+    public void insertHistoryRecord(String sku, int quantity, InventoryHistoryType type){
         LocalDateTime now = LocalDateTime.now();
         quantity = Math.max(quantity, 0);
         InventoryHistoryRecord historyRecord = db.newRecord(Tables.INVENTORY_HISTORY);
@@ -38,6 +38,6 @@ public class InventoryHistoryDbAccessor {
         historyRecord.setQuantity(quantity);
         historyRecord.setSku(sku);
         historyRecord.setType(type);
-        return db.insertInto(Tables.INVENTORY_HISTORY).set(historyRecord).returningResult(Tables.INVENTORY_HISTORY.ID).fetchOne(Tables.INVENTORY_HISTORY.ID);
+        db.insertInto(Tables.INVENTORY_HISTORY).set(historyRecord).returningResult(Tables.INVENTORY_HISTORY.ID).fetchOne(Tables.INVENTORY_HISTORY.ID);
     }
 }

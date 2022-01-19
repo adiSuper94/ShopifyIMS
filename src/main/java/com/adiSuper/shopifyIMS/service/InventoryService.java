@@ -1,6 +1,8 @@
 package com.adiSuper.shopifyIMS.service;
 
 import com.adiSuper.shopifyIMS.dbAccessor.InventoryDbAccessor;
+import com.adiSuper.shopifyIMS.dbAccessor.InventoryHistoryDbAccessor;
+import com.adiSuper.shopifyIMS.generated.core.enums.InventoryHistoryType;
 import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Inventory;
 import com.adiSuper.shopifyIMS.model.InventoryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,12 @@ import java.util.UUID;
 public class InventoryService {
 
     private final InventoryDbAccessor inventoryDbAccessor;
+    private final InventoryHistoryDbAccessor historyDbAccessor;
 
     @Autowired
-    public InventoryService(InventoryDbAccessor inventoryDbAccessor) {
+    public InventoryService(InventoryDbAccessor inventoryDbAccessor, InventoryHistoryDbAccessor historyDbAccessor) {
         this.inventoryDbAccessor = inventoryDbAccessor;
+        this.historyDbAccessor = historyDbAccessor;
     }
 
     public Inventory getInventoryById(UUID id){
@@ -47,16 +51,18 @@ public class InventoryService {
             inventory.setSupplierId(inventory.getSupplierId());
         }
 
-
+        InventoryHistoryType type;
         if(inventoryRequest.isReduce()){
             if(inventory.getQuantity() - inventoryRequest.getCount() < 0){
                 throw new DataIntegrityViolationException("Quantity cannot be < 0.");
             }
             inventory.setQuantity(inventory.getQuantity() - inventoryRequest.getCount());
+            type = InventoryHistoryType.reduce_inventory;
         }else{
             inventory.setQuantity(inventory.getQuantity() + inventoryRequest.getCount());
+            type = InventoryHistoryType.add_inventory;
         }
-        return inventoryDbAccessor.insertInventory(inventory);
+        return inventoryDbAccessor.upsertInventory(inventory, type);
     }
 
     public int deleteInventoryById(UUID id){
