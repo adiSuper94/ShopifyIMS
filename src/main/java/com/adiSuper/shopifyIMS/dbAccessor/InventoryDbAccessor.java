@@ -1,6 +1,7 @@
 package com.adiSuper.shopifyIMS.dbAccessor;
 
 import com.adiSuper.shopifyIMS.generated.core.Tables;
+import com.adiSuper.shopifyIMS.generated.core.enums.InventoryHistoryType;
 import com.adiSuper.shopifyIMS.generated.core.tables.daos.InventoryDao;
 import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Inventory;
 import com.adiSuper.shopifyIMS.generated.core.tables.records.InventoryRecord;
@@ -9,7 +10,6 @@ import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +22,13 @@ public class InventoryDbAccessor {
 
     private final DSLContext db;
     private final InventoryDao dao;
+    private final InventoryHistoryDbAccessor historyDbAccessor;
 
     @Autowired
-    public InventoryDbAccessor(DSLContext db, InventoryDao dao) {
+    public InventoryDbAccessor(DSLContext db, InventoryDao dao, InventoryHistoryDbAccessor historyDbAccessor) {
         this.db = db;
         this.dao = dao;
+        this.historyDbAccessor = historyDbAccessor;
     }
 
     public Optional<Inventory> fetchInventoryById(UUID id){
@@ -62,6 +64,7 @@ public class InventoryDbAccessor {
         }
         return filterAndFetch(filter.get());
     }
+
 
     private List<Inventory> filterAndFetch(Inventory inventory) {
         Condition condition = andAllCriteria(inventory);

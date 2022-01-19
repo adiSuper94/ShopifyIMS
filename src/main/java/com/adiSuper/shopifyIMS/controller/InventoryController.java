@@ -1,6 +1,7 @@
 package com.adiSuper.shopifyIMS.controller;
 
 import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Inventory;
+import com.adiSuper.shopifyIMS.model.InventoryRequest;
 import com.adiSuper.shopifyIMS.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,12 @@ public class InventoryController {
     }
 
     @PostMapping("/v1/inventories")
-    public UUID postInventory(@RequestBody @Valid Inventory inventory){
-        return inventoryService.createInventory(inventory);
+    public UUID postInventory(@RequestBody @Valid InventoryRequest inventoryRequest){
+        return inventoryService.addOrReduceInventory(inventoryRequest);
     }
+
+    /*@PostMapping("/v1/inventories/{id}")
+    public Inventory addOrReduceInventoryById(@PathVariable UUID id, @RequestBody InventoryRequest inventoryRequest){
+        return inventoryService.addOrReduceInventoryById(id, inventoryRequest);
+    }*/
 }

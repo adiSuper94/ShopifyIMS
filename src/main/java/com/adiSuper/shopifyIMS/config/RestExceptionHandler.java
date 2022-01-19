@@ -1,5 +1,6 @@
 package com.adiSuper.shopifyIMS.config;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DuplicateKeyException.class)
     protected ResponseEntity<Object> handleDuplicateKey(DuplicateKeyException ex) {
+        String errorMessage = ex.getCause().getMessage();
+        return buildResponseEntity(HttpStatus.CONFLICT, errorMessage);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    protected ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         String errorMessage = ex.getCause().getMessage();
         return buildResponseEntity(HttpStatus.CONFLICT, errorMessage);
     }

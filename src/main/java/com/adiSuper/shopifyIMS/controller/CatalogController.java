@@ -5,7 +5,6 @@ import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Catalog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;

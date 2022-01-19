@@ -3,6 +3,9 @@ CREATE SCHEMA IF NOT EXISTS core;
 CREATE TYPE inventory_history_type AS ENUM (
     'add_inventory',
     'reduce_inventory',
+    'create_inventory_entry',
+    'edit_inventory_entry',
+    'delete_inventory_entry',
     'create_catalog_entry',
     'edit_catalog_entry',
     'delete_catalog_entry'

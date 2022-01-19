@@ -2,8 +2,9 @@ package com.adiSuper.shopifyIMS.service;
 
 import com.adiSuper.shopifyIMS.dbAccessor.InventoryDbAccessor;
 import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Inventory;
-import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Supplier;
+import com.adiSuper.shopifyIMS.model.InventoryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -31,7 +32,30 @@ public class InventoryService {
         return optionalSupplier.orElseThrow(() -> new EntityNotFoundException("Inventory not found with id::" + id.toString() + "(or could not not update row with given values)"));
     }
 
-    public UUID createInventory(Inventory inventory){
+    public UUID addOrReduceInventory(InventoryRequest inventoryRequest){
+        Inventory filter = new Inventory();
+        filter.setSku(inventoryRequest.getSku());
+        filter.setSupplierId(inventoryRequest.getSupplierId());
+        Inventory inventory;
+        try{
+            inventory = getAllInventory(Optional.of(filter)).get(0);
+        }
+        catch (EntityNotFoundException ex){
+            inventory = new Inventory();
+            inventory.setQuantity(0);
+            inventory.setSku(inventoryRequest.getSku());
+            inventory.setSupplierId(inventory.getSupplierId());
+        }
+
+
+        if(inventoryRequest.isReduce()){
+            if(inventory.getQuantity() - inventoryRequest.getCount() < 0){
+                throw new DataIntegrityViolationException("Quantity cannot be < 0.");
+            }
+            inventory.setQuantity(inventory.getQuantity() - inventoryRequest.getCount());
+        }else{
+            inventory.setQuantity(inventory.getQuantity() + inventoryRequest.getCount());
+        }
         return inventoryDbAccessor.insertInventory(inventory);
     }
 
@@ -50,4 +74,15 @@ public class InventoryService {
         }
         return inventories;
     }
+
+    /* public Inventory addOrReduceInventoryById(UUID id, InventoryRequest inventoryRequest) {
+        Inventory inventory = getInventoryById(id);
+        if(inventoryRequest.isReduce()){
+            inventory.setQuantity(inventory.getQuantity() - inventoryRequest.getCount());
+        }else{
+            inventory.setQuantity(inventory.getQuantity() + inventoryRequest.getCount());
+        }
+        return patchInventoryById(id, inventory);
+
+    }*/
 }
