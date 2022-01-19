@@ -1,7 +1,6 @@
 package com.adiSuper.shopifyIMS.service;
 
 import com.adiSuper.shopifyIMS.dbAccessor.SupplierDbAccessor;
-import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Catalog;
 import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

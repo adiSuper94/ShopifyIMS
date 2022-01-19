@@ -10,7 +10,7 @@ info:
 servers:
   - url: 'http://localhost:3000'
 paths:
-  '/v1/catalog/{catalogId}':
+  '/v1/catalogs/{catalogId}':
     parameters:
       - schema:
           type: string
@@ -75,7 +75,7 @@ paths:
               schema:
                 type: number
       description: Delete an item from catalog with the matching ID.
-  /v1/catalog:
+  /v1/catalogs:
     post:
       summary: Create New User
       operationId: post-catalog
@@ -122,14 +122,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Catalog'
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: sku
-          required: true
+      parameters: []
       description: Get Catalog item for the matching SKU.
-  '/v1/supplier/{supplierId}':
+  '/v1/suppliers/{supplierId}':
     parameters:
       - schema:
           type: string
@@ -170,7 +165,7 @@ paths:
               schema:
                 type: number
       description: Delete Supplier byID.
-  /v1/supplier:
+  /v1/suppliers:
     post:
       summary: ''
       operationId: post-v1-supplier
@@ -193,6 +188,19 @@ paths:
                   type: string
               required: []
         description: Post the necessary fields for the API to create a new supplier.
+    parameters: []
+  '/v1/inventories/{inventoryId}':
+    parameters:
+      - schema:
+          type: string
+        name: inventoryId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-v1-inventories-inventoryId
 components:
   schemas:
     Catalog:
@@ -251,3 +259,27 @@ components:
           format: date
           readOnly: true
       description: Supplier Schema
+    Inventory:
+      title: Inventory
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        supplier_id:
+          type: string
+          format: uuid
+        sku:
+          type: string
+        quantity:
+          type: integer
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        modified_at:
+          type: string
+          format: date-time
+          readOnly: true
+      description: Inventory model schema.

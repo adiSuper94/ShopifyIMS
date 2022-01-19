@@ -33,7 +33,7 @@ public class SupplierController {
         return supplierService.deleteSupplierById(id);
     }
 
-    @GetMapping("/v1/suppliers/")
+    @GetMapping("/v1/suppliers")
     public UUID postSupplier(@RequestBody @Valid Supplier supplier){
         return supplierService.addSupplier(supplier);
     }
