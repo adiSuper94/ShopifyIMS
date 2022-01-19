@@ -1,4 +1,4 @@
-package com.adiSuper94.ShopifyIMS;
+package com.adiSuper.shopifyIMS;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

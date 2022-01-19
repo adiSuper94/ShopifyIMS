@@ -18,12 +18,11 @@ CREATE TABLE supplier
 
 CREATE TABLE catalog
 (
-    id          UUID    DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id          UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     sku         VARCHAR(100) NOT NULL UNIQUE,
     name        VARCHAR(100) NOT NULL,
-    type        BOOLEAN DEFAULT TRUE,
-    details     jsonb        NOT NULL,
-    price       NUMERIC,
+    details     jsonb,
+    price       NUMERIC NOT NULL,
     created_at  TIMESTAMP    NOT NULL,
     modified_at TIMESTAMP    NOT NULL
 );

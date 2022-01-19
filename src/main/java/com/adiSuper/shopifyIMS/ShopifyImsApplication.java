@@ -1,4 +1,4 @@
-package com.adiSuper94.ShopifyIMS;
+package com.adiSuper.shopifyIMS;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

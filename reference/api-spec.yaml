@@ -1,0 +1,168 @@
+openapi: 3.1.0
+info:
+  title: api-spec
+  version: '1.0'
+  summary: shopify-ims REST API spec
+  description: Open API spec for Shopify Inventory Management System
+  contact:
+    name: Aditya Subramanian
+    email: aditarun2008@gmail.com
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  '/catalog/{catalogId}':
+    parameters:
+      - schema:
+          type: string
+        name: catalogId
+        in: path
+        required: true
+    get:
+      summary: Get Catalog Info by Catalog ID
+      tags: []
+      responses:
+        '200':
+          description: Catalog Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalog'
+              examples: {}
+        '404':
+          description: Catalog Not Found
+      operationId: get-catalog-catalogId
+      description: Retrieve the information of item from catalog with the matching ID.
+      parameters: []
+    patch:
+      summary: Update Catalog Information
+      operationId: patch-catalog-catalogId
+      responses:
+        '200':
+          description: Catalog Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalog'
+              examples: {}
+        '404':
+          description: User Not Found
+        '409':
+          description: Email Already Taken
+      description: Update the information of an existing catalog entry.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                details:
+                  type: object
+                price:
+                  description: 'If a new email is given, the user''s email verified property will be set to false.'
+                  type: number
+            examples: {}
+        description: Patch catalog properties to update.
+    delete:
+      summary: ''
+      operationId: delete-catalog-catalogId
+      responses:
+        '200':
+          description: OK
+      description: Delete an item from catalog with the matching ID.
+  /catalog:
+    post:
+      summary: Create New User
+      operationId: post-catalog
+      responses:
+        '200':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalog'
+              examples: {}
+        '400':
+          description: Missing Required Information
+        '409':
+          description: Email Already Taken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                sku:
+                  type: string
+                details:
+                  type: object
+                price:
+                  type: number
+              required:
+                - name
+                - sku
+                - price
+            examples: {}
+        description: Post the necessary fields for the API to create a new catalog entry.
+      description: Create a new catalog entry.
+    parameters: []
+    get:
+      summary: ''
+      operationId: get-catalog
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalog'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: sku
+          required: true
+      description: Get Catalog item for the matching SKU.
+components:
+  schemas:
+    Catalog:
+      type: object
+      title: Catalog
+      description: Catalog object schema
+      examples: []
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the given user.
+          format: uuid
+          readOnly: true
+        sku:
+          type: string
+        name:
+          type: string
+        details:
+          format: date
+          example: '1997-10-31'
+          type: object
+        created_at:
+          type: string
+          description: Set to true if the user's email has been verified.
+          format: date-time
+          readOnly: true
+        modified_at:
+          type: string
+          format: date-time
+          description: The date that the user was created.
+          readOnly: true
+        price:
+          type: number
+          format: float
+          minimum: 0
+      required:
+        - id
+        - sku
+        - name
+        - created_at
