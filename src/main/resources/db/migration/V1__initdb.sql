@@ -24,7 +24,7 @@ CREATE TABLE catalog
     id          UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     sku         VARCHAR(100) NOT NULL UNIQUE,
     name        VARCHAR(100) NOT NULL,
-    details     jsonb,
+    details     TEXT,
     price       NUMERIC NOT NULL,
     created_at  TIMESTAMP    NOT NULL,
     modified_at TIMESTAMP    NOT NULL
@@ -50,7 +50,6 @@ CREATE TABLE inventory_history
     sku         VARCHAR(100),
     quantity    INTEGER,
     created_at  TIMESTAMP              NOT NULL,
-    modified_at TIMESTAMP              NOT NULL,
-    FOREIGN KEY (sku) REFERENCES catalog (sku) ON DELETE CASCADE
+    modified_at TIMESTAMP              NOT NULL
 );
 

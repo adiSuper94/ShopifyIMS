@@ -71,12 +71,12 @@ public class InventoryDbAccessor {
             InventoryRecord inventoryRecord = db.newRecord(Tables.INVENTORY, inventory);
             String sku = inventory.getSku() == null ? optionalOldInventory.get().getSku(): inventory.getSku();
             int quantity = inventory.getQuantity() == null ? optionalOldInventory.get().getQuantity(): inventory.getQuantity();
-            Inventory[] inventories = new Inventory[1];
             db.transaction(configuration -> {
+                inventoryRecord.update();
+                inventoryRecord.refresh();
                 historyDbAccessor.insertHistoryRecord(sku, quantity, InventoryHistoryType.edit_inventory_entry);
-                inventories[0] = db.update(Tables.INVENTORY).set(inventoryRecord).returningResult(Tables.INVENTORY.fieldsRow()).fetchOneInto(Inventory.class);
             });
-            return Optional.ofNullable(inventories[0]);
+            return Optional.ofNullable(inventoryRecord.into(Inventory.class));
         }
         return Optional.empty();
     }

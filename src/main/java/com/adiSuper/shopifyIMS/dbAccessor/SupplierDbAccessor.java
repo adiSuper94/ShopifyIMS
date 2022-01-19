@@ -32,8 +32,11 @@ public class SupplierDbAccessor {
         Optional<Supplier> optionalOldSupplier = this.fetchSupplierById(id);
         if (optionalOldSupplier.isPresent()) {
             supplier.setModifiedAt(LocalDateTime.now());
+            supplier.setId(id);
             SupplierRecord supplierRecord = db.newRecord(Tables.SUPPLIER, supplier);
-            return Optional.ofNullable(db.update(Tables.SUPPLIER).set(supplierRecord).returningResult(Tables.SUPPLIER.fieldsRow()).fetchOneInto(Supplier.class));
+            supplierRecord.update();
+            supplierRecord.refresh();
+            return Optional.ofNullable(supplierRecord.into(Supplier.class));
         }
         return Optional.empty();
     }

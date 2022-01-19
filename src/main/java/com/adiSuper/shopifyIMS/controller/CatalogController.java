@@ -35,13 +35,13 @@ public class CatalogController {
         return catalogService.deleteCatalogById(id);
     }
 
-    @GetMapping("/v1/catalogs/")
+    @GetMapping("/v1/catalogs")
     public List<Catalog> getCatalogById(@RequestBody Optional<Catalog> optionalCatalog){
         return catalogService.getAllCatalog(optionalCatalog);
     }
 
-    @PostMapping("/v1/catalogs/")
-    public UUID postCatalog(@RequestBody @Valid Catalog catalog){
+    @PostMapping("/v1/catalogs")
+    public UUID postCatalog(@RequestBody Catalog catalog){
         return catalogService.addCatalog(catalog);
     }
 

@@ -33,7 +33,7 @@ public class InventoryHistoryDbAccessor {
         LocalDateTime now = LocalDateTime.now();
         quantity = Math.max(quantity, 0);
         InventoryHistoryRecord historyRecord = db.newRecord(Tables.INVENTORY_HISTORY);
-        historyRecord.setModifiedAt(now);
+        historyRecord.setCreatedAt(now);
         historyRecord.setModifiedAt(now);
         historyRecord.setQuantity(quantity);
         historyRecord.setSku(sku);

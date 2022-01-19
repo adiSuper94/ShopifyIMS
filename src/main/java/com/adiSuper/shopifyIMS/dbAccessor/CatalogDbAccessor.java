@@ -59,12 +59,12 @@ public class CatalogDbAccessor {
             catalog.setModifiedAt(now);
             CatalogRecord catalogRecord = db.newRecord(Tables.CATALOG, catalog);
             String sku = catalog.getSku() == null? optionalOldCatalog.get().getSku(): catalog.getSku();
-            final Catalog[] updatedCatalog = new Catalog[1];
             db.transaction(configuration -> {
-                updatedCatalog[0] = db.update(Tables.CATALOG).set(catalogRecord).returningResult(Tables.CATALOG.fieldsRow()).fetchOneInto(Catalog.class);
+                catalogRecord.update();
+                catalogRecord.refresh();
                 historyDbAccessor.insertHistoryRecord(sku, 0, InventoryHistoryType.edit_catalog_entry);
             });
-            return Optional.ofNullable(updatedCatalog[0]);
+            return Optional.ofNullable(catalogRecord.into(Catalog.class));
         }
         return Optional.empty();
     }

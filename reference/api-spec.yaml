@@ -77,7 +77,7 @@ paths:
       description: Delete an item from catalog with the matching ID.
   /v1/catalogs:
     post:
-      summary: Create New User
+      summary: Create New Catalog
       operationId: post-catalog
       responses:
         '200':
@@ -101,7 +101,7 @@ paths:
                 sku:
                   type: string
                 details:
-                  type: object
+                  type: string
                 price:
                   type: number
               required:
@@ -184,9 +184,8 @@ paths:
             schema:
               type: object
               properties:
-                '':
+                name:
                   type: string
-              required: []
         description: Post the necessary fields for the API to create a new supplier.
     parameters: []
   '/v1/inventories/{inventoryId}':
@@ -221,7 +220,7 @@ components:
         details:
           format: date
           example: '1997-10-31'
-          type: object
+          type: string
         created_at:
           type: string
           description: Set to true if the user's email has been verified.
