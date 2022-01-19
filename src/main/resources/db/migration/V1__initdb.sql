@@ -31,7 +31,7 @@ CREATE TABLE inventory
 (
     id          UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     supplier_id UUID      NOT NULL,
-    sku         VARCHAR(100),
+    sku         VARCHAR(100) NOT NULL,
     quantity    INTEGER   NOT NULL CHECK ( quantity >= 0 ),
     created_at  TIMESTAMP NOT NULL,
     modified_at TIMESTAMP NOT NULL,

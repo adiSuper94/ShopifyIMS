@@ -4,11 +4,14 @@ import com.adiSuper.shopifyIMS.generated.core.Tables;
 import com.adiSuper.shopifyIMS.generated.core.tables.daos.CatalogDao;
 import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Catalog;
 import com.adiSuper.shopifyIMS.generated.core.tables.records.CatalogRecord;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -52,5 +55,34 @@ public class CatalogDbAccessor {
 
     public int deleteCatalogById(UUID id) {
         return db.delete(Tables.CATALOG).where(Tables.CATALOG.ID.eq(id)).execute();
+    }
+
+    public List<Catalog> getAllCatalog(Optional<Catalog> filter) {
+        if(filter.isEmpty()){
+            return fetchWithCondition(DSL.trueCondition());
+        }
+        Condition condition = andAllConditions(filter.get());
+        return fetchWithCondition(condition);
+    }
+
+    private Condition andAllConditions(Catalog catalog) {
+        Condition condition = DSL.trueCondition();
+        if(catalog.getName() != null){
+            condition = condition.and(Tables.CATALOG.NAME.eq(catalog.getName()));
+        }
+        if(catalog.getSku() != null){
+            condition = condition.and(Tables.CATALOG.SKU.eq(catalog.getSku()));
+        }
+        if(catalog.getId() != null){
+            condition = condition.and(Tables.CATALOG.ID.eq(catalog.getId()));
+        }
+        if(catalog.getPrice() != null){
+            condition = condition.and(Tables.CATALOG.PRICE.eq(catalog.getPrice()));
+        }
+        return condition;
+    }
+
+    private List<Catalog> fetchWithCondition(Condition condition){
+        return db.selectFrom(Tables.CATALOG).where(condition).fetchInto(Catalog.class);
     }
 }

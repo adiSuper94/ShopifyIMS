@@ -5,7 +5,10 @@ import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Catalog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -34,8 +37,8 @@ public class CatalogController {
     }
 
     @GetMapping("/v1/catalogs/")
-    public Catalog getCatalogById(@RequestParam String sku){
-        return catalogService.getCatalogBySku(sku);
+    public List<Catalog> getCatalogById(@RequestBody Optional<Catalog> optionalCatalog){
+        return catalogService.getAllCatalog(optionalCatalog);
     }
 
     @PostMapping("/v1/catalogs/")

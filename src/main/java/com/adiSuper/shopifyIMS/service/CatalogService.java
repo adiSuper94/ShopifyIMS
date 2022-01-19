@@ -5,11 +5,13 @@ import com.adiSuper.shopifyIMS.generated.core.Tables;
 import com.adiSuper.shopifyIMS.generated.core.tables.daos.CatalogDao;
 import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Catalog;
 import com.adiSuper.shopifyIMS.generated.core.tables.records.CatalogRecord;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,10 +30,12 @@ public class CatalogService {
         return optionalCatalog.orElseThrow(() -> new EntityNotFoundException("Catalog not found with id::" + id.toString()));
     }
 
-    public Catalog getCatalogBySku(String sku){
-
-        Optional<Catalog> optionalCatalog = catalogDbAccessor.getCatalogBySku(sku);
-        return optionalCatalog.orElseThrow(() -> new EntityNotFoundException("Catalog not found with sku::" + sku));
+    public List<Catalog> getAllCatalog(Optional<Catalog> filter){
+        List<Catalog> catalogs = catalogDbAccessor.getAllCatalog(filter);
+        if(catalogs.isEmpty()){
+            throw new EntityNotFoundException("No Catalog found.");
+        }
+        return catalogs;
     }
 
     public UUID addCatalog(Catalog catalog){

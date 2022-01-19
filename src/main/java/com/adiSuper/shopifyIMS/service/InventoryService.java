@@ -44,6 +44,10 @@ public class InventoryService {
     }
 
     public List<Inventory> getAllInventory(Optional<Inventory> filter){
-        return inventoryDbAccessor.fetchAllInventories(filter);
+        List<Inventory> inventories =  inventoryDbAccessor.fetchAllInventories(filter);
+        if(inventories.isEmpty()){
+            throw new EntityNotFoundException("No Inventory found.");
+        }
+        return inventories;
     }
 }

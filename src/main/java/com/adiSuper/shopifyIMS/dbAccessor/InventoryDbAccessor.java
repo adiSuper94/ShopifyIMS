@@ -83,10 +83,6 @@ public class InventoryDbAccessor {
     }
 
     private List<Inventory> fetchWithCondition(Condition condition){
-        List<Inventory> inventories = db.selectFrom(Tables.INVENTORY).where(condition).fetch().into(Inventory.class);
-        if(inventories.isEmpty()){
-            throw new EntityNotFoundException("No Inventory found.");
-        }
-        return inventories;
+        return db.selectFrom(Tables.INVENTORY).where(condition).fetch().into(Inventory.class);
     }
 }
