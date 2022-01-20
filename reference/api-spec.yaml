@@ -241,6 +241,33 @@ paths:
                   type: integer
         description: keys are used as filters.
       description: Get all inventories by filter.
+  /reports/get-catalog-csv:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-reports-get-catalog-csv
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              properties: {}
+      description: get Catalog csv report
+  /reports/get-inventory-csv:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: object
+                properties: {}
+      operationId: get-reports-get-inventory-csv
+      description: get Inventory csv report
 components:
   schemas:
     Catalog:
