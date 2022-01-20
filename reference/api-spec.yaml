@@ -243,7 +243,7 @@ paths:
       description: Get all inventories by filter.
   /reports/get-catalog-csv:
     get:
-      summary: Your GET endpoint
+      summary: Catalog csv report
       tags: []
       responses: {}
       operationId: get-reports-get-catalog-csv
@@ -256,7 +256,7 @@ paths:
       description: get Catalog csv report
   /reports/get-inventory-csv:
     get:
-      summary: Your GET endpoint
+      summary: download inventory report csv
       tags: []
       responses:
         '200':

@@ -2,9 +2,17 @@ package com.adiSuper.shopifyIMS.service;
 
 import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Catalog;
 import com.adiSuper.shopifyIMS.generated.core.tables.pojos.Inventory;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,14 +28,16 @@ public class CSVGeneratorService {
         this.catalogService = catalogService;
     }
 
-    public String generateCatalogCSVReport(){
+    public Path generateCatalogCSVReport() throws IOException {
         List<Catalog> catalogList = catalogService.getAllCatalog(Optional.empty());
-        return catalogToCsv(catalogList);
+        String catalogCsv = catalogToCsv(catalogList);
+        return writeStringToFile(catalogCsv, "src/main/resources/reports/catalog-report.csv");
     }
 
-    public String generateInventoryCSVReport(){
+    public Path generateInventoryCSVReport() throws IOException {
         List<Inventory> inventoryList = inventoryService.getAllInventory(Optional.empty());
-        return inventoryToCsv(inventoryList);
+        String inventoryCsv = inventoryToCsv(inventoryList);
+        return writeStringToFile(inventoryCsv, "src/main/resources/reports/inventory-report.csv");
     }
 
     private String inventoryToCsv(List<Inventory> inventoryList){
@@ -58,5 +68,14 @@ public class CSVGeneratorService {
             sb.append("\n");
         }
         return sb.toString();
+    }
+
+    private Path writeStringToFile(String text, String filename) throws IOException {
+        byte[] buffer = text.getBytes(StandardCharsets.UTF_8);
+        File targetFile = new File(filename);
+        OutputStream outStream = new FileOutputStream(targetFile);
+        outStream.write(buffer);
+        IOUtils.closeQuietly(outStream);
+        return Paths.get(targetFile.getAbsolutePath());
     }
 }
